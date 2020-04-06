@@ -1,0 +1,8 @@
+<div>
+	<h2>Register</h2>
+	<form (ngSubmit)="authService.signInRegular(email, password)">
+    <p><input type="text" placeholder="Email" name="email" [(ngModel)]="email" required></p>
+		<p><input type="password" placeholder="Password" name="password" [(ngModel)]="password" required></p>
+		<p><button>Register</button></p>
+	</form>
+</div>

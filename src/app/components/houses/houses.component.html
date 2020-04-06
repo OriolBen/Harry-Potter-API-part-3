@@ -1,0 +1,41 @@
+<div>
+  <h2>Houses</h2>
+  <ul *ngIf="houses.length != 0">
+    <li *ngFor="let house of houses">
+      <a [routerLink]="['/houses', house._id]">{{house.name}}</a>
+      <button *ngIf="!checkHouse(house._id)" (click)="addHouse(house._id)">Mark as local favourite house</button>
+      <button *ngIf="checkHouse(house._id)" (click)="removeHouse(house._id)">Remove as local favourite house</button>
+      <div *ngIf="authService.isLoggedIn()">
+        <button *ngIf="true">Mark as online favourite house - TBD (to be done)</button>
+        <button *ngIf="false">Remove as online favourite house - TBD (to be done)</button>
+      </div>
+      <ul>
+        <li>Mascot: {{house.mascot}}</li>
+        <!-- Some are misspelled or do not use the full name so not possible to link them -->
+        <li>Head of House: {{house.headOfHouse}}</li>
+        <!-- Some are misspelled or do not use the full name so not possible to link them -->
+        <li>House Ghost: {{house.houseGhost}}</li>
+        <!-- Some are misspelled or do not use the full name so not possible to link them -->
+        <li>Founder: {{house.founder}}</li>
+        <!-- Slytherin does not have a school, API creator probably forgot -->
+        <li>School: {{house.school}}</li>
+        <li>Colors:
+          <ul>
+            <li *ngFor="let color of house.colors">{{color}}</li>
+          </ul>
+        </li>
+        <li>Values:
+          <ul>
+            <li *ngFor="let value of house.values">{{value}}</li>
+          </ul>
+        </li>
+        <li>Members:
+          <ul>
+            <!-- Some members IDs do not exist so we need to filter them -->
+            <div *ngFor="let id of house.members"><li *ngIf="check(id)"><a [routerLink]="['/characters', id]">{{characters[id]}}</a></li></div>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

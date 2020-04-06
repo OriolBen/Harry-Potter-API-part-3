@@ -1,0 +1,28 @@
+<div *ngIf="exists">
+	<h2>{{character.name}}</h2>
+	<button *ngIf="!checkCharacter()" (click)="addCharacter()">Add to local favourites</button>
+	<button *ngIf="checkCharacter()" (click)="removeCharacter()">Remove from local favourites</button>
+  <div *ngIf="authService.isLoggedIn()">
+    <button *ngIf="true">Add to online favourites - TBD (to be done)</button>
+  	<button *ngIf="false">Remove from online favourites - TBD (to be done)</button>
+  </div>
+	<ul>
+		<li *ngIf="check(character.house)">House: <a [routerLink]="['/houses', link]">{{character.house}}</a></li>
+		<li *ngIf="check(character.patronus)">Patronus: {{character.patronus}}</li>
+		<li *ngIf="check(character.species)">Species: {{character.species}}</li>
+		<li *ngIf="check(character.bloodStatus)">Blood Status: {{character.bloodStatus}}</li>
+		<li *ngIf="check(character.role)">Role: {{character.role}}</li>
+		<li *ngIf="check(character.school)">School: {{character.school}}</li>
+		<li *ngIf="check(character.deathEater)">Death Eater: {{character.deathEater}}</li>
+		<li *ngIf="check(character.dumbledoresArmy)">Dumbledore's Army: {{character.dumbledoresArmy}}</li>
+		<li *ngIf="check(character.orderOfThePhoenix)">Order of the Phoenix: {{character.orderOfThePhoenix}}</li>
+		<li *ngIf="check(character.ministryOfMagic)">Ministry of Magic: {{character.ministryOfMagic}}</li>
+		<li *ngIf="check(character.alias)">Alias: {{character.alias}}</li>
+		<li *ngIf="check(character.wand)">Wand: {{character.wand}}</li>
+		<li *ngIf="check(character.boggart)">Boggart: {{character.boggart}}</li>
+		<li *ngIf="check(character.animagus)">Animagus: {{character.animagus}}</li>
+	</ul>
+</div>
+<div *ngIf="!exists">
+	<h2>Character does not exist!</h2>
+</div>
