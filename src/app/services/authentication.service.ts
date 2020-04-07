@@ -3,8 +3,6 @@ import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { auth } from 'firebase/app'
 import { AngularFireDatabase } from '@angular/fire/database'
-import { Observable } from 'rxjs'
-import { map, first } from 'rxjs/operators'
 
 @Injectable()
 
