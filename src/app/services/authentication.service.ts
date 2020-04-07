@@ -3,6 +3,7 @@ import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { auth } from 'firebase/app'
 import { AngularFireDatabase } from '@angular/fire/database'
+import { first } from 'rxjs/operators'
 
 @Injectable()
 
@@ -66,8 +67,14 @@ export class AuthenticationService {
     }).catch((e) => alert(e.message))
   }
 
-  isLoggedIn() : boolean {
-    return this.userDetails != null
+  returnUser () {
+   return this.afAuth.authState.pipe(first()).toPromise();
+  }
+
+  async isLoggedIn() {
+   const user = await this.returnUser()
+   if (user) return true
+   else return false
   }
 
   logout() {
