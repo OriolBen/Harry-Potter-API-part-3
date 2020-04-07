@@ -44,7 +44,7 @@ export class DataService {
   }
 
   getHouseOnline() : Observable<any> {
-    return this.db.list(this.authentication.userDetails.uid + "/house").valueChanges()
+    return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("house")).valueChanges()
   }
   
   getSpellsLocal() : Array<string> {

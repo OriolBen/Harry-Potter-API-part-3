@@ -28,9 +28,7 @@ export class HouseComponent implements OnInit {
       if (this.authService.isLoggedIn()) {
         this.storage.getHouseOnline().subscribe((house) => {
           this.online = house
-          console.log(this.online)
-        });
-        console.log(this.online)
+        })
       }
     }, 2500)
   }
@@ -64,6 +62,10 @@ export class HouseComponent implements OnInit {
 
   checkHouseLocal(id : string) : boolean {
     return this.local == id
+  }
+
+  checkHouseOnline(id : string) : boolean {
+    return this.online == id
   }
 
   check(id : string) : boolean {
