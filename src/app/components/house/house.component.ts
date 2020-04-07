@@ -25,11 +25,7 @@ export class HouseComponent implements OnInit {
     this.local = this.storage.getHouseLocal()
     this.getHouse()
     setTimeout(() => {
-      if (this.authService.isLoggedIn()) {
-        this.storage.getHouseOnline().subscribe((house) => {
-          this.online = house
-        })
-      }
+      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => this.online = house)
     }, 2500)
   }
 
@@ -56,8 +52,16 @@ export class HouseComponent implements OnInit {
     this.local = this.storage.addFavouriteLocal("house", id).house
   }
 
+  addHouseOnline(id : string) : void {
+    this.online = this.storage.addFavouriteOnline("house", id).house
+  }
+
   removeHouseLocal(id : string) : void {
     this.local = this.storage.removeFavouriteLocal("house", id).house
+  }
+
+  removeHouseOnline(id : string) : void {
+    this.online = this.storage.removeFavouriteOnline("house", id).house
   }
 
   checkHouseLocal(id : string) : boolean {

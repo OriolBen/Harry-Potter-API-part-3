@@ -39,6 +39,10 @@ export class DataService {
     return this.local
   }
 
+  getFavouriteOnline() : Observable<any> {
+    return this.db.list(this.authentication.userDetails.uid).valueChanges()
+  }
+
   getHouseLocal() : string {
     return this.local.house
   }
@@ -51,8 +55,16 @@ export class DataService {
     return this.local.spells
   }
 
+  getSpellsOnline() : Observable<any> {
+    return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("spells")).valueChanges()
+  }
+
   getCharactersLocal() : Array<string> {
     return this.local.characters
+  }
+
+  getCharactersOnline() : Observable<any> {
+    return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("characters")).valueChanges()
   }
 
   addFavouriteLocal(category : string, id : string) : Favourite {
@@ -62,6 +74,22 @@ export class DataService {
         break
       default:
         this.local[category].push(id)
+        break
+    }
+    this.data.setItem('Harry Potter API', JSON.stringify(this.local))
+    return this.local
+  }
+
+  addFavouriteOnline(category : string, id : string) : Favourite {
+    switch (category) {
+      case "house":
+        this.db.database.ref(this.authentication.userDetails.uid).update({
+          house: id
+        })
+        this.local.house = id
+        break
+      default:
+        // To Be Done (TBD)
         break
     }
     this.data.setItem('Harry Potter API', JSON.stringify(this.local))
