@@ -67,7 +67,7 @@ export class AuthenticationService {
     }).catch((e) => alert(e.message))
   }
 
-  returnUser () {
+  returnUser() {
    return this.afAuth.authState.pipe(first()).toPromise();
   }
 
