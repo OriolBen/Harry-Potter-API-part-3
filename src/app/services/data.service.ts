@@ -80,7 +80,7 @@ export class DataService {
     return this.local
   }
 
-  addFavouriteOnline(category : string, id : string) : Favourite {
+  addFavouriteOnline(category : string, id : string) {
     switch (category) {
       case "house":
         this.db.database.ref(this.authentication.userDetails.uid).update({
@@ -89,11 +89,9 @@ export class DataService {
         this.local.house = id
         break
       default:
-        // To Be Done (TBD)
+        // TO BE DONE (TBD)
         break
     }
-    this.data.setItem('Harry Potter API', JSON.stringify(this.local))
-    return this.local
   }
 
   removeFavouriteLocal(category : string, id : string) : Favourite {
@@ -109,5 +107,16 @@ export class DataService {
     }
     this.data.setItem('Harry Potter API', JSON.stringify(this.local))
     return this.local
+  }
+
+  removeFavouriteOnline(category : string, id : string) {
+    switch (category) {
+      case "house": 
+        this.db.database.ref(this.authentication.userDetails.uid + "/house").remove()
+        break
+      default:
+        // TO BE DONE (TBD)
+        break
+    }
   }
 }
