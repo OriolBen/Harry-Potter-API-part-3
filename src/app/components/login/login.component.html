@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="logged">
 	<h2>Login</h2>
 	<form (ngSubmit)="authService.loginRegular(email, password)">
     <p><input type="text" placeholder="Email" name="email" [(ngModel)]="email" required></p>

@@ -22,9 +22,6 @@ export class AccountComponent implements OnInit {
       this.oobCode = params['oobCode']
     })
     switch (this.mode) {
-      case undefined:
-        this.mode = "normal"
-        break
       case "resetPassword":
         this.authService.checkOobCode(this.mode, this.oobCode)
         break
