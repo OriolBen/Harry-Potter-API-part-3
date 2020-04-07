@@ -37,7 +37,7 @@ export class AuthenticationService {
       })
       alert("Successful login.")
       this.logged = true
-      this.router.navigate([""])
+      window.location.href = "https://harry-potter-api-part-3.stackblitz.io/"
     }).catch((e) => alert(e.message))
   }
 
@@ -72,6 +72,7 @@ export class AuthenticationService {
   }
 
   isLoggedIn() : boolean {
+    console.log(this.logged)
     return this.logged
   }
 
