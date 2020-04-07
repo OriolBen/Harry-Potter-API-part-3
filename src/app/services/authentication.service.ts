@@ -27,8 +27,7 @@ export class AuthenticationService {
     return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()).then((result) => {
       alert("Successful login.")
       this.logged = true
-      this.router.navigate([""])
-      // window.location.href = "https://harry-potter-api-part-3.stackblitz.io/"
+      window.location.href = "https://harry-potter-api-part-3.stackblitz.io/"
     }).catch((e) => alert(e.message))
   }
 
