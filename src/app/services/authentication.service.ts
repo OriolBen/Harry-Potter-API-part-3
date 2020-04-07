@@ -3,7 +3,8 @@ import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { auth } from 'firebase/app'
 import { AngularFireDatabase } from '@angular/fire/database'
-import { first } from 'rxjs/operators'
+import { Observable } from 'rxjs'
+import { map, first } from 'rxjs/operators'
 
 @Injectable()
 
@@ -11,6 +12,7 @@ export class AuthenticationService {
   user
   userDetails : firebase.User = null 
   displayName : string = ""
+  logged : boolean = false
 
   constructor(private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) { 
     this.user = afAuth.authState
@@ -18,6 +20,7 @@ export class AuthenticationService {
       if (user) {
         this.userDetails = user
         this.displayName = (this.userDetails.displayName) ? this.userDetails.displayName : this.userDetails.email
+        this.logged = true
       } 
       else this.userDetails = null
     }) 
@@ -35,6 +38,7 @@ export class AuthenticationService {
         }
       })
       alert("Successful login.")
+      this.logged = true
       this.router.navigate([""])
     }).catch((e) => alert(e.message))
   }
@@ -52,6 +56,7 @@ export class AuthenticationService {
       })
       this.afAuth.auth.currentUser.sendEmailVerification()
       alert("Successful registration.\nPlease verify your email address.")
+      this.logged = true
       this.router.navigate([""])
     }).catch((e) => alert(e.message))
   }
@@ -63,21 +68,17 @@ export class AuthenticationService {
         alert("Successful login.\nPlease verify your email address.")
       }
       else alert("Successful login.")
+      this.logged = true
       this.router.navigate([""])
     }).catch((e) => alert(e.message))
   }
 
-  returnUser() {
-   return this.afAuth.authState.pipe(first()).toPromise();
+  isLoggedIn() : boolean {
+    return this.logged
   }
 
-  async isLoggedIn() {
-   const user = await this.returnUser()
-   if (user) return true
-   else return false
-  }
-
-  logout() {
+  logout() : any {
+    this.logged = false
     return this.afAuth.auth.signOut().then((res) => this.router.navigate([""]))
   }
 
