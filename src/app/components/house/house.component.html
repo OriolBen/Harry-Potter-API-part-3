@@ -1,7 +1,11 @@
 <div *ngIf="exists">
   <h2>{{house.name}}</h2>
-  <button *ngIf="!checkHouse(house._id)" (click)="addHouse(house._id)">Mark as local favourite house</button>
-  <button *ngIf="checkHouse(house._id)" (click)="removeHouse(house._id)">Remove as local favourite house</button>
+  <button *ngIf="!checkHouseLocal(house._id)" (click)="addHouseLocal(house._id)">Mark as local favourite house</button>
+  <button *ngIf="checkHouseLocal(house._id)" (click)="removeHouseLocal(house._id)">Remove as local favourite house</button>
+  <div *ngIf="authService.isLoggedIn()">
+    <button *ngIf="true">Mark as online favourite house - TBD (to be done)</button>
+    <button *ngIf="false">Remove as online favourite house - TBD (to be done)</button>
+  </div>
   <ul>
     <li>Mascot: {{house.mascot}}</li>
     <!-- Some are misspelled or do not use the full name so not possible to link them -->

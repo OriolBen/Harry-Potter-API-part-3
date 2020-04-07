@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../services/authentication.service'
 export class HouseComponent implements OnInit {
   house : object
   local : string
+  online : string
   id : string
   exists : boolean
   characters : object = {}
@@ -23,6 +24,15 @@ export class HouseComponent implements OnInit {
     this.route.params.subscribe(res => this.id = res.id)
     this.local = this.storage.getHouseLocal()
     this.getHouse()
+    setTimeout(() => {
+      if (this.authService.isLoggedIn()) {
+        this.storage.getHouseOnline().subscribe((house) => {
+          this.online = house
+          console.log(this.online)
+        });
+        console.log(this.online)
+      }
+    }, 2500)
   }
 
   getHouse() : void {
@@ -44,15 +54,15 @@ export class HouseComponent implements OnInit {
     })
   }
 
-  addHouse(id : string) : void {
+  addHouseLocal(id : string) : void {
     this.local = this.storage.addFavouriteLocal("house", id).house
   }
 
-  removeHouse(id : string) : void {
+  removeHouseLocal(id : string) : void {
     this.local = this.storage.removeFavouriteLocal("house", id).house
   }
 
-  checkHouse(id : string) : boolean {
+  checkHouseLocal(id : string) : boolean {
     return this.local == id
   }
 

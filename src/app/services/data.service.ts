@@ -1,6 +1,8 @@
 import { Inject, Injectable, InjectionToken } from '@angular/core'
 import { AuthenticationService } from './authentication.service'
 import { AngularFireDatabase } from '@angular/fire/database'
+import { Observable } from 'rxjs'
+import { map } from 'rxjs/operators'
 
 export const LOCAL_DATA = new InjectionToken<Storage>('Local Data', {
   providedIn: 'root',
@@ -10,7 +12,7 @@ export const LOCAL_DATA = new InjectionToken<Storage>('Local Data', {
 export interface Favourite {
   house : string,
   characters : Array<string>,
-  spells : Array<string>,
+  spells : Array<string>
 }
 
 @Injectable({
@@ -39,6 +41,10 @@ export class DataService {
 
   getHouseLocal() : string {
     return this.local.house
+  }
+
+  getHouseOnline() : Observable<any> {
+    return this.db.list(this.authentication.userDetails.uid + "/house").valueChanges()
   }
   
   getSpellsLocal() : Array<string> {
