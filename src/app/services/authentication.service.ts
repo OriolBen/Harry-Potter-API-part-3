@@ -37,7 +37,8 @@ export class AuthenticationService {
       })
       alert("Successful login.")
       this.logged = true
-      window.location.href = "https://harry-potter-api-part-3.stackblitz.io/"
+      this.router.navigate([""])
+      // window.location.href = "https://harry-potter-api-part-3.stackblitz.io/"
     }).catch((e) => alert(e.message))
   }
 
