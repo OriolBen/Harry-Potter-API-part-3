@@ -1,9 +1,0 @@
-<div *ngIf="logged">
-	<h2>Login</h2>
-	<form (ngSubmit)="authService.loginRegular(email, password)">
-    <p><input type="text" placeholder="Email" name="email" [(ngModel)]="email" required></p>
-		<p><input type="password" placeholder="Password" name="password" [(ngModel)]="password" required><a routerLink="/reset">Forgot password?</a></p>
-		<p><button>Login</button></p>
-	</form>
-  <a routerLink="/login"><img width="200px" src="https://cdn.jsdelivr.net/gh/OriolBen/Harry-Potter-API-part-3@master/src/app/assets/google.png" (click)="authService.signInGoogle()"></a>
-</div>
