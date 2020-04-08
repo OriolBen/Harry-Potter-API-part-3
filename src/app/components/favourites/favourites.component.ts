@@ -25,7 +25,7 @@ export class FavouritesComponent implements OnInit {
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn()) console.log("HERE")
+    if (this.authService.isLoggedIn())
     this.local = this.storage.getFavouriteLocal()
     this.localEmptyHouse = this.local.house == "" ? true : false
     if (!this.localEmptyHouse) {

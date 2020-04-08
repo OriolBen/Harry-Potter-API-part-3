@@ -22,7 +22,7 @@ export class HousesComponent implements OnInit {
     this.getCharactersNames()
     this.getAllHouses()
     setTimeout(() => {
-      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => this.online = house)
+      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => this.online = house[0])
     }, 2500)
   }
 

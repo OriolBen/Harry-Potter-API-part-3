@@ -35,7 +35,6 @@ export class AuthenticationService {
     return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()).then((result) => {
       this.db.database.ref(result.user.uid).once("value").then((snapshot) => {
         if (snapshot.val() === null) {
-          console.log("HERE")
           this.db.database.ref(result.user.uid).set({
             house: "",
             characters: "",
