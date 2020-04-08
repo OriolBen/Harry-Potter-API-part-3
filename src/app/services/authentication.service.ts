@@ -12,15 +12,22 @@ export class AuthenticationService {
   displayName : string = ""
   logged : boolean = false
 
-  constructor(private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) { 
-    this.user = afAuth.authState
+  constructor(private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
+    this.checkLogIn()
+  }
+
+  checkLogIn() {
+    this.user = this.afAuth.authState
     this.user.subscribe((user) => { 
       if (user) {
         this.userDetails = user
         this.displayName = (this.userDetails.displayName) ? this.userDetails.displayName : this.userDetails.email
         this.logged = true
       } 
-      else this.userDetails = null
+      else {
+        this.userDetails = null
+        this.logged = false
+      }
     }) 
   }
 
@@ -37,8 +44,8 @@ export class AuthenticationService {
         }
       })
       alert("Successful login.")
-      this.logged = true
       this.router.navigate([""])
+      this.checkLogIn()
     }).catch((e) => alert(e.message))
   }
 
@@ -55,8 +62,8 @@ export class AuthenticationService {
       })
       this.afAuth.auth.currentUser.sendEmailVerification()
       alert("Successful registration.\nPlease verify your email address.")
-      this.logged = true
       this.router.navigate([""])
+      this.checkLogIn()
     }).catch((e) => alert(e.message))
   }
 
@@ -67,8 +74,8 @@ export class AuthenticationService {
         alert("Successful login.\nPlease verify your email address.")
       }
       else alert("Successful login.")
-      this.logged = true
       this.router.navigate([""])
+      this.checkLogIn()
     }).catch((e) => alert(e.message))
   }
 
