@@ -33,39 +33,65 @@ export class DataService {
       }
     }
     else this.local = JSON.parse(exists)
+    this.online = this.getFavouriteOnline()
   }
 
   getFavouriteLocal() : Favourite {
     return this.local
   }
 
-  getFavouriteOnline() : Observable<any> {
-    return this.db.list(this.authentication.userDetails.uid).valueChanges()
+  getFavouriteOnline() : Favourite {
+    let data = {
+      "house": "",
+      "characters": [],
+      "spells": []
+    }
+    this.db.database.ref(this.authentication.userDetails.uid).once("value").then((snapshot) => {
+      data.house = snapshot.val().house,
+      data.characters = snapshot.val().characters,
+      data.spells = snapshot.val().spells
+    })
+    console.log(d)
+    return data
   }
 
   getHouseLocal() : string {
     return this.local.house
   }
 
+  /*
   getHouseOnline() : Observable<any> {
     return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("house")).valueChanges()
+  }
+  */
+
+  getHouseOnline() : string {
+    let data = ""
+    this.db.database.ref(this.authentication.userDetails.uid).once("value").then((snapshot) => {
+      data = snapshot.val().house
+    })
+    return data
   }
   
   getSpellsLocal() : Array<string> {
     return this.local.spells
   }
 
+  /*
   getSpellsOnline() : Observable<any> {
     return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("spells")).valueChanges()
   }
+  */
 
   getCharactersLocal() : Array<string> {
     return this.local.characters
   }
 
+  /*
   getCharactersOnline() : Observable<any> {
     return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("characters")).valueChanges()
   }
+  */
 
   addFavouriteLocal(category : string, id : string) : Favourite {
     switch (category) {
@@ -84,10 +110,10 @@ export class DataService {
     switch (category) {
       case "house":
         this.db.database.ref(this.authentication.userDetails.uid).update({
-          house: "id"
+          house: id
         }).then(() => {
-          this.online.house = id
           console.log("HERE")
+          this.online.house = id
           console.log(this.online.house)
         })
         break
