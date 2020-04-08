@@ -20,8 +20,8 @@
     <li *ngFor="let spell of applyFilter()">{{spell.spell}}
       <button *ngIf="!checkSpellLocal(spell._id)" (click)="addSpellLocal(spell._id)">Add to local favourites</button>
       <button *ngIf="checkSpellLocal(spell._id)" (click)="removeSpellLocal(spell._id)">Remove from local favourites</button>
-      <button *ngIf="authService.isLoggedIn() && true">Add to online favourites - TBD (to be done)</button>
-      <button *ngIf="authService.isLoggedIn() && false">Remove from online favourites - TBD (to be done)</button>
+      <button *ngIf="authService.isLoggedIn() && !checkSpellOnline(spell._id)" (click)="addSpellOnline(spell._id)">Add to online favourites</button>
+      <button *ngIf="authService.isLoggedIn() && checkSpellOnline(spell._id)" (click)="removeSpellOnline(spell._id)">Remove from online favourites</button>
       <ul>
         <li>Type: {{spell.type}}</li>
         <li>Effect: {{spell.effect}}</li>

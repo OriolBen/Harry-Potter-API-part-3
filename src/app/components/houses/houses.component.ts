@@ -45,7 +45,7 @@ export class HousesComponent implements OnInit {
   }
 
   addHouseOnline(id : string) : void {
-    this.storage.addFavouriteOnline("house", id).house
+    this.storage.addFavouriteOnline("house", id)
   }
 
   removeHouseLocal(id : string) : void {

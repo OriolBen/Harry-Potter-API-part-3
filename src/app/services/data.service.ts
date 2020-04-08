@@ -97,7 +97,9 @@ export class DataService {
         }).then(() => this.online.house = id)
         break
       default:
-        // TO BE DONE (TBD)
+        this.db.database.ref(this.authentication.userDetails.uid + "/" + category).update({
+          [id]: id
+        }).then(() => this.online[category].push(id))
         break
     }
     return this.online
@@ -126,7 +128,13 @@ export class DataService {
         }).then(() => this.online.house = "") 
         break
       default:
-        // TO BE DONE (TBD)
+        for (var i = 0; i < this.online[category].length; i++) {
+          if (this.online[category][i] == id) this.online[category].splice(i, 1)
+        }
+        if (this.online[category].length != 0) this.db.database.ref(this.authentication.userDetails.uid + "/" + category + "/" + id).remove()
+        else this.db.database.ref(this.authentication.userDetails.uid).update({
+          [category]: ""
+        })
         break
     }
     return this.online

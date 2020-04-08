@@ -24,6 +24,13 @@ export class SpellsComponent implements OnInit {
   ngOnInit() {
     this.local = this.storage.getSpellsLocal()
     this.getAllSpells()
+    setTimeout(() => {
+      if (this.authService.isLoggedIn()) {
+        this.storage.getSpellsOnline().subscribe((spells) => {
+          this.online = Object.values(spells[0])
+        })
+      }
+    }, 2500)
   }
 
   getAllSpells() : void {
@@ -57,13 +64,28 @@ export class SpellsComponent implements OnInit {
     this.local = this.storage.addFavouriteLocal("spells", id).spells
   }
 
+  addSpellOnline(id : string) : void {
+    this.storage.addFavouriteOnline("spells", id)
+  }
+
   removeSpellLocal(id : string) : void {
     this.local = this.storage.removeFavouriteLocal("spells", id).spells
+  }
+
+  removeSpellOnline(id : string) : void {
+    this.storage.removeFavouriteOnline("spells", id)
   }
 
   checkSpellLocal(id : string) : boolean {
     for (var i = 0; i < this.local.length; i++) {
       if (this.local[i] == id) return true
+    }
+    return false
+  }
+
+  checkSpellOnline(id : string) : boolean {
+    for (var i = 0; i < this.online.length; i++) {
+      if (this.online[i] == id) return true
     }
     return false
   }
