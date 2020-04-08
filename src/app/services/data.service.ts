@@ -84,15 +84,18 @@ export class DataService {
     switch (category) {
       case "house":
         this.db.database.ref(this.authentication.userDetails.uid).update({
-          house: id
+          house: "id"
+        }).then(() => {
+          this.online.house = id
+          console.log("HERE")
+          console.log(this.online.house)
         })
-        this.local.house = id
         break
       default:
         // TO BE DONE (TBD)
         break
     }
-    return this.local
+    return this.online
   }
 
   removeFavouriteLocal(category : string, id : string) : Favourite {
@@ -113,10 +116,9 @@ export class DataService {
   removeFavouriteOnline(category : string, id : string) : Favourite {
     switch (category) {
       case "house": 
-        this.db.database.ref(this.authentication.userDetails.uid + "/house").update({
+        this.db.database.ref(this.authentication.userDetails.uid).update({
           house: ""
-        })
-        this.online.house = ""
+        }).then(() => this.online.house = "") 
         break
       default:
         // TO BE DONE (TBD)

@@ -83,7 +83,7 @@ export class AuthenticationService {
     return this.logged
   }
 
-  logout() : any {
+  logout() {
     this.logged = false
     return this.afAuth.auth.signOut().then((res) => this.router.navigate([""]))
   }
