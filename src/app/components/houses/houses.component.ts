@@ -18,15 +18,11 @@ export class HousesComponent implements OnInit {
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 
   ngOnInit() {
-    console.log("HERE")
     this.local = this.storage.getHouseLocal()
     this.getCharactersNames()
     this.getAllHouses()
     setTimeout(() => {
-      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => {
-        this.online = house[0]
-        console.log(this.online)
-      })
+      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => this.online = house[0])
     }, 2500)
   }
 

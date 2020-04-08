@@ -115,7 +115,7 @@ export class DataService {
         break
     }
     this.data.setItem('Harry Potter API', JSON.stringify(this.local))
-    return this.online
+    return this.local
   }
 
   removeFavouriteOnline(category : string, id : string) : Favourite {
