@@ -1,0 +1,32 @@
+<div>
+  <h2>Spells</h2>
+  <button (click)="updateFilter('none')">All spells</button>
+  <p>
+    <select (change)="updateFilter('type')" [(ngModel)]="option">
+      <option value="" disabled selected>Spells by type</option>
+      <option value="Charm">Charm</option>
+      <option value="Curse">Curse</option>
+      <option value="Enchantment">Enchantment</option>
+      <option value="Hex">Hex</option>
+      <option value="Jinx">Jinx</option>
+      <option value="Spell">Spell</option>
+    </select>
+  </p>
+  <p>
+    <input (keyup.enter)="updateFilter('name')" [(ngModel)]="temporaryName" placeholder="Spells by name">
+    <button (click)="updateFilter('name')">Search</button>
+  </p>
+  <ul>
+    <li *ngFor="let spell of applyFilter()">{{spell.spell}}
+      <button *ngIf="!checkSpellLocal(spell._id)" (click)="addSpellLocal(spell._id)">Add to local favourites</button>
+      <button *ngIf="checkSpellLocal(spell._id)" (click)="removeSpellLocal(spell._id)">Remove from local favourites</button>
+      <button *ngIf="authService.isLoggedIn() && true">Add to online favourites - TBD (to be done)</button>
+      <button *ngIf="authService.isLoggedIn() && false">Remove from online favourites - TBD (to be done)</button>
+      <ul>
+        <li>Type: {{spell.type}}</li>
+        <li>Effect: {{spell.effect}}</li>
+      </ul>
+    </li>
+  </ul>
+  <h2 *ngIf="filtered.length == 0">No spells were found!</h2>
+</div>

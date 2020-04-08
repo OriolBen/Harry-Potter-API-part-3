@@ -1,0 +1,83 @@
+<div>
+  <h2>Characters</h2>
+  <button (click)="updateFilter('none')">All Characters</button>
+  <p>
+    <input (keyup.enter)="updateFilter('name')" [(ngModel)]="temporaryName" placeholder="Characters by name">
+    <button (click)="updateFilter('name')">Search</button>
+  </p>
+  <p>House:
+    <select [(ngModel)]="temporaryFilters['house']">
+      <option value="Ignore" selected>Ignore</option>
+      <option value="Gryffindor">Gryffindor</option>
+      <option value="Ravenclaw">Ravenclaw</option>
+      <option value="Slytherin">Slytherin</option>
+      <option value="Hufflepuff">Hufflepuff</option>
+    </select>
+  </p>
+  <p>Blood Status:
+    <select [(ngModel)]="temporaryFilters['bloodStatus']">
+      <option value="Ignore" selected>Ignore</option>
+      <option value="pure-blood">Pure-blood</option>
+      <option value="half-blood">Half-blood</option>
+      <option value="muggle-born">Muggle-born</option>
+      <option value="unknown">Unknown</option>
+    </select>
+  </p>
+  <p>Death Eater:
+    <select [(ngModel)]="temporaryFilters['deathEater']">
+      <option value="Ignore" selected>Ignore</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </p>
+  <p>Dumbledore's Army:
+    <select [(ngModel)]="temporaryFilters['dumbledoresArmy']">
+      <option value="Ignore" selected>Ignore</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </p>
+  <p>Order of the Phoenix:
+    <select [(ngModel)]="temporaryFilters['orderOfThePhoenix']">
+      <option value="Ignore" selected>Ignore</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </p>
+  <p>Ministry of Magic:
+    <select [(ngModel)]="temporaryFilters['ministryOfMagic']">
+      <option value="Ignore" selected>Ignore</option>
+      <option value="true">Yes</option>
+      <option value="false">No</option>
+    </select>
+  </p>
+  <button (click)="updateFilter('custom')">Custom search</button>
+  <ul>
+    <li *ngFor="let character of applyFilter()">
+      <a [routerLink]="['/characters', character._id]">{{character.name}}</a>
+      <button *ngIf="!checkCharacter(character._id)" (click)="addCharacter(character._id)">Add to local favourites</button>
+      <button *ngIf="checkCharacter(character._id)" (click)="removeCharacter(character._id)">Remove from local favourites</button>
+      <div *ngIf="authService.isLoggedIn()">
+        <button *ngIf="true">Add to online favourites - TBD (to be done)</button>
+        <button *ngIf="false">Remove from online favourites - TBD (to be done)</button>
+      </div>
+      <ul>
+        <li *ngIf="check(character.house)">House: <a [routerLink]="['/houses', house(character.house)]">{{character.house}}</a></li>
+        <li *ngIf="check(character.patronus)">Patronus: {{character.patronus}}</li>
+        <li *ngIf="check(character.species)">Species: {{character.species}}</li>
+        <li *ngIf="check(character.bloodStatus)">Blood Status: {{character.bloodStatus}}</li>
+        <li *ngIf="check(character.role)">Role: {{character.role}}</li>
+        <li *ngIf="check(character.school)">School: {{character.school}}</li>
+        <li *ngIf="check(character.deathEater)">Death Eater: {{character.deathEater}}</li>
+        <li *ngIf="check(character.dumbledoresArmy)">Dumbledore's Army: {{character.dumbledoresArmy}}</li>
+        <li *ngIf="check(character.orderOfThePhoenix)">Order of the Phoenix: {{character.orderOfThePhoenix}}</li>
+        <li *ngIf="check(character.ministryOfMagic)">Ministry of Magic: {{character.ministryOfMagic}}</li>
+        <li *ngIf="check(character.alias)">Alias: {{character.alias}}</li>
+        <li *ngIf="check(character.wand)">Wand: {{character.wand}}</li>
+        <li *ngIf="check(character.boggart)">Boggart: {{character.boggart}}</li>
+        <li *ngIf="check(character.animagus)">Animagus: {{character.animagus}}</li>
+      </ul>
+    </li>
+  </ul>
+  <h2 *ngIf="filtered.length == 0">No characters were found!</h2>
+</div>
