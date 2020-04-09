@@ -141,7 +141,19 @@ export class DataService {
     return this.online
   }
 
-  resetOnlineData(result : any) : void {
-    
+  uploadOnlineData() : void {
+    let characters = this.local.characters.reduce(function(o, val) {
+      o[val] = val
+      return o
+    }, {})
+    let spells = this.local.spells.reduce(function(o, val) {
+      o[val] = val
+      return o
+    }, {})
+    this.db.database.ref(this.authentication.userDetails.uid).set({
+      house: this.local.house,
+      characters: characters,
+      spells: spells,
+    })
   }
 }

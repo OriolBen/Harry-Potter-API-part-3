@@ -3,7 +3,6 @@ import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { auth } from 'firebase/app'
 import { AngularFireDatabase } from '@angular/fire/database'
-import { DataService } from './data.service'
 
 @Injectable()
 
@@ -13,7 +12,7 @@ export class AuthenticationService {
   displayName : string = ""
   logged : boolean = false
 
-  constructor(private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase, private storage : DataService) {
+  constructor(private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
     this.checkLogIn()
   }
 

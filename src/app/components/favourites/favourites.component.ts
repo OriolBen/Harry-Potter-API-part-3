@@ -79,6 +79,8 @@ export class FavouritesComponent implements OnInit {
           if (!this.onlineEmptySpells) this.getSpellsOnline()
           this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
           this.ready = true
+          console.log("Constructor")
+          console.log(this.online)
         })
       }
     }, 2500)
@@ -228,6 +230,9 @@ export class FavouritesComponent implements OnInit {
 
   upload() {
     this.uploading = true
+    this.storage.uploadOnlineData()
+    console.log("Upload")
+    console.log(this.online)
     this.uploading = false
   }
 }
