@@ -140,4 +140,8 @@ export class DataService {
     }
     return this.online
   }
+
+  resetOnlineData(result : any) : void {
+    
+  }
 }

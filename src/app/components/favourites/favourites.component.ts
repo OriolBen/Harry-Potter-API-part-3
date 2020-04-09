@@ -11,6 +11,8 @@ import { AuthenticationService } from '../../services/authentication.service'
 
 export class FavouritesComponent implements OnInit {
   mode : string = "local"
+  uploading : boolean = false
+  ready : boolean = false
   localHouse : object = {}
   localHouseCharacters : object = {}
   localCharacters : Array<any> = []
@@ -76,6 +78,7 @@ export class FavouritesComponent implements OnInit {
           this.onlineEmptySpells = this.online.spells.length == 0 ? true : false
           if (!this.onlineEmptySpells) this.getSpellsOnline()
           this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
+          this.ready = true
         })
       }
     }, 2500)
@@ -221,5 +224,10 @@ export class FavouritesComponent implements OnInit {
 
   removeSpellOnline(id : string) : void {
     this.storage.removeFavouriteOnline("spells", id)
+  }
+
+  upload() {
+    this.uploading = true
+    this.uploading = false
   }
 }

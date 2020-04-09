@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!uploading">
   <button *ngIf="authService.isLoggedIn()" (click)="mode = 'local'">Local</button>
   <button *ngIf="authService.isLoggedIn()" (click)="mode = 'online'">Online</button>
   <div *ngIf="mode == 'local'">
@@ -7,7 +7,7 @@
       <div *ngIf="authService.isLoggedIn()">
         <p>Upload your local favourites to our database.</p>
         <p><strong>WARNING! This action will delete your current online favourites.</strong></p>
-        <button>Upload data</button>
+        <button *ngIf="ready" (click)="upload()">Upload data</button>
       </div>
       <hr>
       <div *ngIf="!localEmptyHouse">
@@ -182,4 +182,7 @@
       <h2>You have no online favourites :(</h2>
     </div>
   </div>
+</div>
+<div *ngIf="uploading">
+  <h2>Uploading data...</h2>
 </div>
