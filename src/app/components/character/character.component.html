@@ -1,11 +1,9 @@
 <div *ngIf="exists">
 	<h2>{{character.name}}</h2>
-	<button *ngIf="!checkCharacter()" (click)="addCharacter()">Add to local favourites</button>
-	<button *ngIf="checkCharacter()" (click)="removeCharacter()">Remove from local favourites</button>
-  <div *ngIf="authService.isLoggedIn()">
-    <button *ngIf="true">Add to online favourites - TBD (to be done)</button>
-  	<button *ngIf="false">Remove from online favourites - TBD (to be done)</button>
-  </div>
+	<button *ngIf="!checkCharacterLocal()" (click)="addCharacterLocal()">Add to local favourites</button>
+	<button *ngIf="checkCharacterLocal()" (click)="removeCharacterLocal()">Remove from local favourites</button>
+  <button *ngIf="authService.isLoggedIn() && !checkCharacterOnline()" (click)="addCharacterOnline()">Add to online favourites</button>
+  <button *ngIf="authService.isLoggedIn() && checkCharacterOnline()" (click)="removeCharacterOnline()">Remove from online favourites</button>
 	<ul>
 		<li *ngIf="check(character.house)">House: <a [routerLink]="['/houses', link]">{{character.house}}</a></li>
 		<li *ngIf="check(character.patronus)">Patronus: {{character.patronus}}</li>

@@ -13,6 +13,7 @@ import { AuthenticationService } from '../../services/authentication.service'
 export class CharacterComponent implements OnInit {
   character : object
   local : Array<string>
+  online : Array<string>
   id : string
   exists : boolean
   link : string
@@ -23,6 +24,13 @@ export class CharacterComponent implements OnInit {
     this.route.params.subscribe(res => this.id = res.id)
     this.local = this.storage.getCharactersLocal()
     this.getCharacter()
+    setTimeout(() => {
+      if (this.authService.isLoggedIn()) {
+        this.storage.getCharactersOnline().subscribe((characters) => {
+          this.online = Object.values(characters[0])
+        })
+      }
+    }, 2500)
   }
 
   getCharacter() : void {
@@ -40,17 +48,32 @@ export class CharacterComponent implements OnInit {
     return typeof value !== 'undefined'
   }
 
-  addCharacter() : void {
+  addCharacterLocal() : void {
     this.local = this.storage.addFavouriteLocal("characters", this.id).characters
   }
 
-  removeCharacter() : void {
+  addCharacterOnline() : void {
+    this.storage.addFavouriteOnline("characters", this.id)
+  }
+
+  removeCharacterLocal() : void {
     this.local = this.storage.removeFavouriteLocal("characters", this.id).characters
   }
 
-  checkCharacter() : boolean {
+  removeCharacterOnline() : void {
+    this.storage.removeFavouriteOnline("characters", this.id)
+  }
+
+  checkCharacterLocal() : boolean {
     for (var i = 0; i < this.local.length; i++) {
       if (this.local[i] == this.id) return true
+    }
+    return false
+  }
+
+  checkCharacterOnline() : boolean {
+    for (var i = 0; i < this.online.length; i++) {
+      if (this.online[i] == this.id) return true
     }
     return false
   }
