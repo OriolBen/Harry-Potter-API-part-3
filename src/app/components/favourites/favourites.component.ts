@@ -25,6 +25,20 @@ export class FavouritesComponent implements OnInit {
   localEmptyHouse : boolean = true
   localEmptyCharacters : boolean = true
   localEmptySpells : boolean = true
+  onlineHouse : object = {}
+  onlineHouseCharacters : object = {}
+  onlineCharacters : Array<any> = []
+  onlineCharactersHouses : object = {}
+  onlineSpells : Array<any> = []
+  online : Favourite = {
+    house: "",
+    characters: [],
+    spells: []
+  }
+  onlineEmpty : boolean = true
+  onlineEmptyHouse : boolean = true
+  onlineEmptyCharacters : boolean = true
+  onlineEmptySpells : boolean = true
 
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 

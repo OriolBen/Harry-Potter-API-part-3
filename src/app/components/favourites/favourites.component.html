@@ -94,4 +94,92 @@
       <h2>You have no local favourites :(</h2>
     </div>
   </div>
+  <div *ngIf="mode == 'online'">
+    <div *ngIf="!onlineEmpty">
+      <h2>Online favourites</h2>
+      <hr>
+      <div *ngIf="!onlineEmptyHouse">
+        <h3>{{onlineHouse.name}} is your favourite house!</h3>
+        <button (click)="removeHouseOnline(localHouse._id)">Remove as favourite house</button>
+        <ul>
+          <li>Mascot: {{onlineHouse.mascot}}</li>
+          <!-- Some are misspelled or do not use the full name so not possible to link them -->
+          <li>Head of House: {{onlineHouse.headOfHouse}}</li>
+          <!-- Some are misspelled or do not use the full name so not possible to link them -->
+          <li>House Ghost: {{onlineHouse.houseGhost}}</li>
+          <!-- Some are misspelled or do not use the full name so not possible to link them -->
+          <li>Founder: {{onlineHouse.founder}}</li>
+          <!-- Slytherin does not have a school, API creator probably forgot -->
+          <li>School: {{onlineHouse.school}}</li>
+          <li>Colors:
+            <ul>
+              <li *ngFor="let color of onlineHouse.colors">{{color}}</li>
+            </ul>
+          </li>
+          <li>Values:
+            <ul>
+              <li *ngFor="let value of onlineHouse.values">{{value}}</li>
+            </ul>
+          </li>
+          <li>Members:
+            <ul>
+              <!-- Some members IDs do not exist so we need to filter them -->
+              <div *ngFor="let member of onlineHouse.members"><li *ngIf="checkHouseCharactersOnline(member._id)"><a [routerLink]="['/characters', member._id]">{{onlineHouseCharacters[member._id]}}</a></li></div>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="onlineEmptyHouse">
+        <h3>You do not have a favourite house!</h3>
+      </div>
+      <hr>
+      <div *ngIf="!onlineEmptyCharacters">
+        <h3>Favourite characters</h3>
+        <ul>
+          <li *ngFor="let character of onlineCharacters">
+            <a [routerLink]="['/characters', character._id]">{{character.name}}</a>
+            <button (click)="removeCharacterOnline(character._id)">Remove from favourites</button>
+            <ul>
+              <li *ngIf="checkCharacterInfo(character.house)">House: <a [routerLink]="['/houses', characterHouseOnline(character.house)]">{{character.house}}</a></li>
+              <li *ngIf="checkCharacterInfo(character.patronus)">Patronus: {{character.patronus}}</li>
+              <li *ngIf="checkCharacterInfo(character.species)">Species: {{character.species}}</li>
+              <li *ngIf="checkCharacterInfo(character.bloodStatus)">Blood Status: {{character.bloodStatus}}</li>
+              <li *ngIf="checkCharacterInfo(character.role)">Role: {{character.role}}</li>
+              <li *ngIf="checkCharacterInfo(character.school)">School: {{character.school}}</li>
+              <li *ngIf="checkCharacterInfo(character.deathEater)">Death Eater: {{character.deathEater}}</li>
+              <li *ngIf="checkCharacterInfo(character.dumbledoresArmy)">Dumbledore's Army: {{character.dumbledoresArmy}}</li>
+              <li *ngIf="checkCharacterInfo(character.orderOfThePhoenix)">Order of the Phoenix: {{character.orderOfThePhoenix}}</li>
+              <li *ngIf="checkCharacterInfo(character.ministryOfMagic)">Ministry of Magic: {{character.ministryOfMagic}}</li>
+              <li *ngIf="checkCharacterInfo(character.alias)">Alias: {{character.alias}}</li>
+              <li *ngIf="checkCharacterInfo(character.wand)">Wand: {{character.wand}}</li>
+              <li *ngIf="checkCharacterInfo(character.boggart)">Boggart: {{character.boggart}}</li>
+              <li *ngIf="checkCharacterInfo(character.animagus)">Animagus: {{character.animagus}}</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="onlineEmptyCharacters">
+        <h3>Your favourite character list is empty!</h3>
+      </div>
+      <hr>
+      <div *ngIf="!onlineEmptySpells">
+        <h3>Favourite spells</h3>
+        <ul>
+          <li *ngFor="let spell of onlineSpells">{{spell.spell}}
+            <button (click)="removeSpellOnline(spell._id)">Remove from favourites</button>
+            <ul>
+              <li>Type: {{spell.type}}</li>
+              <li>Effect: {{spell.effect}}</li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div *ngIf="onlineEmptySpells">
+        <h3>Your favourite spell list is empty!</h3>
+      </div>
+    </div>
+    <div *ngIf="onlineEmpty">
+      <h2>You have no online favourites :(</h2>
+    </div>
+  </div>
 </div>
