@@ -76,6 +76,8 @@ export class FavouritesComponent implements OnInit {
           this.onlineEmptySpells = this.online.spells.length == 0 ? true : false
           if (!this.onlineEmptySpells) this.getSpellsOnline()
           this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
+          console.log(this.online.spells)
+          console.log(this.onlineSpells)
         })
       }
     }, 2500)
@@ -119,10 +121,6 @@ export class FavouritesComponent implements OnInit {
 
   removeHouseOnline(id : string) : void {
     this.storage.removeFavouriteOnline("house", id)
-    this.onlineHouse = {}
-    this.onlineHouseCharacters = {}
-    this.onlineEmptyHouse = this.online.house == "" ? true : false
-    this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
   }
 
   checkHouseCharactersLocal(id : string) : boolean {
@@ -191,14 +189,6 @@ export class FavouritesComponent implements OnInit {
 
   removeCharacterOnline(id : string) : void {
     this.storage.removeFavouriteOnline("characters", id)
-    this.onlineEmptyCharacters = this.online.characters.length == 0 ? true : false
-    this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
-    for (let i = 0, stop = false; i < this.onlineCharacters.length && !stop; ++i) {
-      if (this.onlineCharacters[i]._id == id) {
-        this.onlineCharacters.splice(i, 1)
-        stop = true
-      }
-    }
   }
 
   getSpellsLocal() : void {
@@ -230,14 +220,13 @@ export class FavouritesComponent implements OnInit {
   }
 
   removeSpellOnline(id : string) : void {
-    this.storage.removeFavouriteOnline("spells", id)
-    this.onlineEmptySpells = this.online.spells.length == 0 ? true : false
-    this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
     for (let i = 0, stop = false; i < this.onlineSpells.length && !stop; ++i) {
       if (this.onlineSpells[i]._id == id) {
         this.onlineSpells.splice(i, 1)
         stop = true
       }
     }
+    console.log(this.onlineSpells)
+    this.storage.removeFavouriteOnline("spells", id)
   }
 }
