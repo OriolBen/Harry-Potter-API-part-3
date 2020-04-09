@@ -25,30 +25,29 @@ export class FavouritesComponent implements OnInit {
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 
   ngOnInit() {
-    if (this.authService.isLoggedIn())
     this.local = this.storage.getFavouriteLocal()
     this.localEmptyHouse = this.local.house == "" ? true : false
     if (!this.localEmptyHouse) {
-      this.getHouse()
-      this.getCharactersNames()
+      this.getHouseLocal()
+      this.getCharactersNamesLocal()
     }
     this.localEmptyCharacters = this.local.characters.length == 0 ? true : false
     if (!this.localEmptyCharacters) {
-      this.getHousesId()
-      this.getCharacters()
+      this.getHousesIdLocal()
+      this.getCharactersLocal()
     }
     this.localEmptySpells = this.local.spells.length == 0 ? true : false
-    if (!this.localEmptySpells) this.getSpells()
+    if (!this.localEmptySpells) this.getSpellsLocal()
     this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
   }
 
-  getHouse() : void {
+  getHouseLocal() : void {
     this.api.getHouse(this.local.house).subscribe((data : object) => {
       this.localHouse = data[0]
     })
   }
 
-  getCharactersNames() : void {
+  getCharactersNamesLocal() : void {
     this.api.getAllCharacters().subscribe((data : Array<any>) => {
       data.forEach((character) => {
         if (character.house == this.localHouse["name"]) this.localHouseCharacters[character._id] = character.name
@@ -56,7 +55,7 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
-  removeHouse(id : string) : void {
+  removeHouseLocal(id : string) : void {
     this.local.house = this.storage.removeFavouriteLocal("house", id).house
     this.localHouse = {}
     this.localHouseCharacters = {}
@@ -64,11 +63,11 @@ export class FavouritesComponent implements OnInit {
     this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
   }
 
-  checkHouseCharacters(id : string) : boolean {
+  checkHouseCharactersLocal(id : string) : boolean {
     return id in this.localHouseCharacters
   }
 
-  getHousesId() : void {
+  getHousesIdLocal() : void {
     this.api.getAllHouses().subscribe((data : Array<any>) => {
       data.forEach((house) => {
         this.localCharactersHouses[house.name] = house._id
@@ -76,7 +75,7 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
-  getCharacters() : void {
+  getCharactersLocal() : void {
     this.local.characters.forEach((id) => {
       this.api.getCharacter(id).subscribe((data : object) => {
         this.localCharacters.push(data)
@@ -88,11 +87,11 @@ export class FavouritesComponent implements OnInit {
     return typeof value !== 'undefined'
   }
 
-  characterHouse(house : string) : string {
+  characterHouseLocal(house : string) : string {
     return this.localCharactersHouses[house]
   }
 
-  removeCharacter(id : string) : void {
+  removeCharacterLocal(id : string) : void {
     this.local.characters = this.storage.removeFavouriteLocal("characters", id).characters
     this.localEmptyCharacters = this.local.characters.length == 0 ? true : false
     this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
@@ -104,7 +103,7 @@ export class FavouritesComponent implements OnInit {
     }
   }
 
-  getSpells() : void {
+  getSpellsLocal() : void {
     this.api.getAllSpells().subscribe((data : Array<any>) => {
       data.forEach((spell) => {
         if (this.local.spells.includes(spell._id)) this.localSpells.push(spell)
@@ -112,7 +111,7 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
-  removeSpell(id : string) : void {
+  removeSpellLocal(id : string) : void {
     this.local.spells = this.storage.removeFavouriteLocal("spells", id).spells
     this.localEmptySpells = this.local.spells.length == 0 ? true : false
     this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false

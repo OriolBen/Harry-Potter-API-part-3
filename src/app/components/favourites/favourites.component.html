@@ -7,13 +7,12 @@
       <div *ngIf="authService.isLoggedIn()">
         <p>Upload your local favourites to our database.</p>
         <p><strong>WARNING! This action will delete your current online favourites.</strong></p>
-        <p>TBD (to be done)</p>
         <button>Upload</button>
       </div>
       <hr>
       <div *ngIf="!localEmptyHouse">
         <h3>{{localHouse.name}} is your favourite house!</h3>
-        <button (click)="removeHouse(localHouse._id)">Remove as favourite house</button>
+        <button (click)="removeHouseLocal(localHouse._id)">Remove as favourite house</button>
         <ul>
           <li>Mascot: {{localHouse.mascot}}</li>
           <!-- Some are misspelled or do not use the full name so not possible to link them -->
@@ -37,7 +36,7 @@
           <li>Members:
             <ul>
               <!-- Some members IDs do not exist so we need to filter them -->
-              <div *ngFor="let member of localHouse.members"><li *ngIf="checkHouseCharacters(member._id)"><a [routerLink]="['/characters', member._id]">{{localHouseCharacters[member._id]}}</a></li></div>
+              <div *ngFor="let member of localHouse.members"><li *ngIf="checkHouseCharactersLocal(member._id)"><a [routerLink]="['/characters', member._id]">{{localHouseCharacters[member._id]}}</a></li></div>
             </ul>
           </li>
         </ul>
@@ -51,9 +50,9 @@
         <ul>
           <li *ngFor="let character of localCharacters">
             <a [routerLink]="['/characters', character._id]">{{character.name}}</a>
-            <button (click)="removeCharacter(character._id)">Remove from favourites</button>
+            <button (click)="removeCharacterLocal(character._id)">Remove from favourites</button>
             <ul>
-              <li *ngIf="checkCharacterInfo(character.house)">House: <a [routerLink]="['/houses', characterHouse(character.house)]">{{character.house}}</a></li>
+              <li *ngIf="checkCharacterInfo(character.house)">House: <a [routerLink]="['/houses', characterHouseLocal(character.house)]">{{character.house}}</a></li>
               <li *ngIf="checkCharacterInfo(character.patronus)">Patronus: {{character.patronus}}</li>
               <li *ngIf="checkCharacterInfo(character.species)">Species: {{character.species}}</li>
               <li *ngIf="checkCharacterInfo(character.bloodStatus)">Blood Status: {{character.bloodStatus}}</li>
@@ -79,7 +78,7 @@
         <h3>Favourite spells</h3>
         <ul>
           <li *ngFor="let spell of localSpells">{{spell.spell}}
-            <button (click)="removeSpell(spell._id)">Remove from favourites</button>
+            <button (click)="removeSpellLocal(spell._id)">Remove from favourites</button>
             <ul>
               <li>Type: {{spell.type}}</li>
               <li>Effect: {{spell.effect}}</li>
@@ -94,9 +93,5 @@
     <div *ngIf="localEmpty">
       <h2>You have no local favourites :(</h2>
     </div>
-  </div>
-  <div *ngIf="mode == 'online'">
-    <h2>You have no online favourites :(</h2>
-    <h4>TBD (to be done)</h4>
   </div>
 </div>
