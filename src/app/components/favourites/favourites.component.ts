@@ -57,6 +57,28 @@ export class FavouritesComponent implements OnInit {
     this.localEmptySpells = this.local.spells.length == 0 ? true : false
     if (!this.localEmptySpells) this.getSpellsLocal()
     this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
+    setTimeout(() => {
+      if (this.authService.isLoggedIn()) {
+        this.storage.getFavouriteOnline().subscribe((data) => {
+          this.online.characters = Object.values(data[0])
+          this.online.house = data[1]
+          this.online.spells = Object.values(data[2])
+          this.onlineEmptyHouse = this.online.house == "" ? true : false
+          if (!this.onlineEmptyHouse) {
+            this.getHouseOnline()
+            this.getCharactersNamesOnline()
+          }
+          this.onlineEmptyCharacters = this.online.characters.length == 0 ? true : false
+          if (!this.onlineEmptyCharacters) {
+            this.getHousesIdOnline()
+            this.getCharactersOnline()
+          }
+          this.onlineEmptySpells = this.online.spells.length == 0 ? true : false
+          if (!this.onlineEmptySpells) this.getSpellsOnline()
+          this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
+        })
+      }
+    }, 2500)
   }
 
   getHouseLocal() : void {
@@ -65,10 +87,24 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
+  getHouseOnline() : void {
+    this.api.getHouse(this.online.house).subscribe((data : object) => {
+      this.onlineHouse = data[0]
+    })
+  }
+
   getCharactersNamesLocal() : void {
     this.api.getAllCharacters().subscribe((data : Array<any>) => {
       data.forEach((character) => {
         if (character.house == this.localHouse["name"]) this.localHouseCharacters[character._id] = character.name
+      })
+    })
+  }
+
+  getCharactersNamesOnline() : void {
+    this.api.getAllCharacters().subscribe((data : Array<any>) => {
+      data.forEach((character) => {
+        if (character.house == this.onlineHouse["name"]) this.onlineHouseCharacters[character._id] = character.name
       })
     })
   }
@@ -81,14 +117,34 @@ export class FavouritesComponent implements OnInit {
     this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
   }
 
+  removeHouseOnline(id : string) : void {
+    this.storage.removeFavouriteOnline("house", id)
+    this.onlineHouse = {}
+    this.onlineHouseCharacters = {}
+    this.onlineEmptyHouse = this.online.house == "" ? true : false
+    this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
+  }
+
   checkHouseCharactersLocal(id : string) : boolean {
     return id in this.localHouseCharacters
+  }
+
+  checkHouseCharactersOnline(id : string) : boolean {
+    return id in this.onlineHouseCharacters
   }
 
   getHousesIdLocal() : void {
     this.api.getAllHouses().subscribe((data : Array<any>) => {
       data.forEach((house) => {
         this.localCharactersHouses[house.name] = house._id
+      })
+    })
+  }
+
+  getHousesIdOnline() : void {
+    this.api.getAllHouses().subscribe((data : Array<any>) => {
+      data.forEach((house) => {
+        this.onlineCharactersHouses[house.name] = house._id
       })
     })
   }
@@ -101,12 +157,24 @@ export class FavouritesComponent implements OnInit {
     })
   }
 
+  getCharactersOnline() : void {
+    this.online.characters.forEach((id) => {
+      this.api.getCharacter(id).subscribe((data : object) => {
+        this.onlineCharacters.push(data)
+      })
+    })
+  }
+
   checkCharacterInfo(value : string) : boolean {
     return typeof value !== 'undefined'
   }
 
   characterHouseLocal(house : string) : string {
     return this.localCharactersHouses[house]
+  }
+
+  characterHouseOnline(house : string) : string {
+    return this.onlineCharactersHouses[house]
   }
 
   removeCharacterLocal(id : string) : void {
@@ -121,10 +189,30 @@ export class FavouritesComponent implements OnInit {
     }
   }
 
+  removeCharacterOnline(id : string) : void {
+    this.storage.removeFavouriteOnline("characters", id)
+    this.onlineEmptyCharacters = this.online.characters.length == 0 ? true : false
+    this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
+    for (let i = 0, stop = false; i < this.onlineCharacters.length && !stop; ++i) {
+      if (this.onlineCharacters[i]._id == id) {
+        this.onlineCharacters.splice(i, 1)
+        stop = true
+      }
+    }
+  }
+
   getSpellsLocal() : void {
     this.api.getAllSpells().subscribe((data : Array<any>) => {
       data.forEach((spell) => {
         if (this.local.spells.includes(spell._id)) this.localSpells.push(spell)
+      })
+    })
+  }
+
+  getSpellsOnline() : void {
+    this.api.getAllSpells().subscribe((data : Array<any>) => {
+      data.forEach((spell) => {
+        if (this.online.spells.includes(spell._id)) this.onlineSpells.push(spell)
       })
     })
   }
@@ -136,6 +224,18 @@ export class FavouritesComponent implements OnInit {
     for (let i = 0, stop = false; i < this.localSpells.length && !stop; ++i) {
       if (this.localSpells[i]._id == id) {
         this.localSpells.splice(i, 1)
+        stop = true
+      }
+    }
+  }
+
+  removeSpellOnline(id : string) : void {
+    this.storage.removeFavouriteOnline("spells", id)
+    this.onlineEmptySpells = this.online.spells.length == 0 ? true : false
+    this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
+    for (let i = 0, stop = false; i < this.onlineSpells.length && !stop; ++i) {
+      if (this.onlineSpells[i]._id == id) {
+        this.onlineSpells.splice(i, 1)
         stop = true
       }
     }

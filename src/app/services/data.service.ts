@@ -37,8 +37,9 @@ export class DataService {
     setTimeout(() => {
       if (this.authentication.isLoggedIn()) {
         this.getFavouriteOnline().subscribe((data) => {
-          // TBD - spells & characters
+          this.online.characters = Object.values(data[0])
           this.online.house = data[1]
+          this.online.spells = Object.values(data[2])
         })
       }
     }, 2500)
