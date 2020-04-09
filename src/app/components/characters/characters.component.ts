@@ -13,6 +13,7 @@ export class CharactersComponent implements OnInit {
   characters : Array<any> = []
   houses : object = {}
   local : Array<string> = []
+  online : Array<string> = []
   name : string = ""
   temporaryName : string = ""
   filtered : Array<any> = []
@@ -33,6 +34,13 @@ export class CharactersComponent implements OnInit {
     this.local = this.storage.getCharactersLocal()
     this.getHousesId()
     this.getAllCharacters()
+    setTimeout(() => {
+      if (this.authService.isLoggedIn()) {
+        this.storage.getCharactersOnline().subscribe((characters) => {
+          this.online = Object.values(characters[0])
+        })
+      }
+    }, 2500)
   }
 
   getHousesId() : void {
@@ -105,17 +113,32 @@ export class CharactersComponent implements OnInit {
     })
   }
 
-  addCharacter(id : string) : void {
+  addCharacterLocal(id : string) : void {
     this.local = this.storage.addFavouriteLocal("characters", id).characters
   }
 
-  removeCharacter(id : string) : void {
+  addCharacterOnline(id : string) : void {
+    this.storage.addFavouriteOnline("characters", id)
+  }
+
+  removeCharacterLocal(id : string) : void {
     this.local = this.storage.removeFavouriteLocal("characters", id).characters
   }
 
-  checkCharacter(id : string) : boolean {
+  removeCharacterOnline(id : string) : void {
+    this.storage.removeFavouriteOnline("characters", id)
+  }
+
+  checkCharacterLocal(id : string) : boolean {
     for (var i = 0; i < this.local.length; i++) {
       if (this.local[i] == id) return true
+    }
+    return false
+  }
+
+  checkCharacterOnline(id : string) : boolean {
+    for (var i = 0; i < this.online.length; i++) {
+      if (this.online[i] == id) return true
     }
     return false
   }
