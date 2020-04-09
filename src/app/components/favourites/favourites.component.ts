@@ -76,8 +76,6 @@ export class FavouritesComponent implements OnInit {
           this.onlineEmptySpells = this.online.spells.length == 0 ? true : false
           if (!this.onlineEmptySpells) this.getSpellsOnline()
           this.onlineEmpty = this.onlineEmptyHouse && this.onlineEmptyCharacters && this.onlineEmptySpells ? true : false
-          console.log(this.online.spells)
-          console.log(this.onlineSpells)
         })
       }
     }, 2500)
@@ -156,6 +154,7 @@ export class FavouritesComponent implements OnInit {
   }
 
   getCharactersOnline() : void {
+    this.onlineCharacters = []
     this.online.characters.forEach((id) => {
       this.api.getCharacter(id).subscribe((data : object) => {
         this.onlineCharacters.push(data)
@@ -200,6 +199,7 @@ export class FavouritesComponent implements OnInit {
   }
 
   getSpellsOnline() : void {
+    this.onlineSpells = []
     this.api.getAllSpells().subscribe((data : Array<any>) => {
       data.forEach((spell) => {
         if (this.online.spells.includes(spell._id)) this.onlineSpells.push(spell)
@@ -220,13 +220,6 @@ export class FavouritesComponent implements OnInit {
   }
 
   removeSpellOnline(id : string) : void {
-    for (let i = 0, stop = false; i < this.onlineSpells.length && !stop; ++i) {
-      if (this.onlineSpells[i]._id == id) {
-        this.onlineSpells.splice(i, 1)
-        stop = true
-      }
-    }
-    console.log(this.onlineSpells)
     this.storage.removeFavouriteOnline("spells", id)
   }
 }
