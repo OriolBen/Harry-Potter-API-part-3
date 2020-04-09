@@ -16,11 +16,15 @@ export class FavouritesComponent implements OnInit {
   localCharacters : Array<any> = []
   localCharactersHouses : object = {}
   localSpells : Array<any> = []
-  local : Favourite
-  localEmpty : boolean
-  localEmptyHouse : boolean
-  localEmptyCharacters : boolean
-  localEmptySpells : boolean
+  local : Favourite = {
+    house: "",
+    characters: [],
+    spells: []
+  }
+  localEmpty : boolean = true
+  localEmptyHouse : boolean = true
+  localEmptyCharacters : boolean = true
+  localEmptySpells : boolean = true
 
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 

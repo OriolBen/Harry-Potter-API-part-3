@@ -11,11 +11,11 @@ import { AuthenticationService } from '../../services/authentication.service'
 })
 
 export class HouseComponent implements OnInit {
-  house : object
-  local : string
-  online : string
-  id : string
-  exists : boolean
+  house : object = {}
+  local : string = ""
+  online : string = ""
+  id : string = ""
+  exists : boolean = false
   characters : object = {}
 
   constructor(private api : ApiService, private storage : DataService, private route : ActivatedRoute, private authService : AuthenticationService) {}

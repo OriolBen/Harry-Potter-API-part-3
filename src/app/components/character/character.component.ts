@@ -11,12 +11,12 @@ import { AuthenticationService } from '../../services/authentication.service'
 })
 
 export class CharacterComponent implements OnInit {
-  character : object
-  local : Array<string>
-  online : Array<string>
-  id : string
-  exists : boolean
-  link : string
+  character : object = {}
+  local : Array<string> = []
+  online : Array<string> = []
+  id : string = ""
+  exists : boolean = false
+  link : string = ""
 
   constructor(private api : ApiService, private storage : DataService, private route : ActivatedRoute, private authService : AuthenticationService) {}
 

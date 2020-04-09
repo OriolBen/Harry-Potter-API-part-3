@@ -7,7 +7,7 @@ import { AngularFireDatabase } from '@angular/fire/database'
 @Injectable()
 
 export class AuthenticationService { 
-  user
+  user : any = null
   userDetails : firebase.User = null 
   displayName : string = ""
   logged : boolean = false

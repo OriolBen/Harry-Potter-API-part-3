@@ -11,8 +11,8 @@ import { AuthenticationService } from '../../services/authentication.service'
 
 export class HousesComponent implements OnInit {
   houses : Array<any> = []
-  local : string
-  online : string
+  local : string = ""
+  online : string = ""
   characters : object = {}
 
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
