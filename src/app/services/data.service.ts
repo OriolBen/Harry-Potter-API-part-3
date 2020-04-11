@@ -30,6 +30,7 @@ export class DataService {
     "characters": [],
     "spells": []
   }
+  uploading : boolean = false
 
   constructor(@Inject(LOCAL_DATA) public data : Storage, private db : AngularFireDatabase, public authentication : AuthenticationService) {
     let exists = this.data.getItem('Harry Potter API')
@@ -141,7 +142,8 @@ export class DataService {
     return this.online
   }
 
-  uploadOnlineData() : void {
+  upload() : void {
+    this.uploading = true
     let characters = this.local.characters.reduce(function(o, val) {
       o[val] = val
       return o
@@ -154,6 +156,6 @@ export class DataService {
       house: this.local.house,
       characters: characters,
       spells: spells,
-    })
+    }).then(() => this.uploading = false)
   }
 }

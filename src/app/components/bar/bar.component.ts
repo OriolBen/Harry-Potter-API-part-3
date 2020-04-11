@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { AuthenticationService } from '../../services/authentication.service'
 
 @Component({
@@ -12,10 +12,4 @@ export class BarComponent {
   show : boolean = false
 
   constructor(private authService : AuthenticationService) {}
-
-  ngOnInit() {
-    setTimeout(() => {
-      if (this.authService.isLoggedIn()) this.show = true
-    }, 2500)
-  }
 }
