@@ -15,10 +15,7 @@ export class BarComponent {
 
   ngOnInit() {
     setTimeout(() => {
-      if (this.authService.isLoggedIn()) {
-        this.message = "Welcome back, " + this.authService.userDetails.email
-        this.show = true
-      }
+      if (this.authService.isLoggedIn()) this.show = true
     }, 2500)
   }
 }
