@@ -26,7 +26,7 @@ export class AccountComponent implements OnInit {
         this.authService.checkOobCode(this.mode, this.oobCode)
         break
       case "verifyEmail":
-        setTimeout(() => { this.authService.checkOobCode(this.mode, this.oobCode) }, 2500)
+        this.authService.checkOobCode(this.mode, this.oobCode)
         break
       default:
         alert("URL is not valid")
