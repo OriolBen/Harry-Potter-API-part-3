@@ -21,9 +21,9 @@ export class HousesComponent implements OnInit {
     this.local = this.storage.getHouseLocal()
     this.getCharactersNames()
     this.getAllHouses()
-    setTimeout(() => {
-      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => this.online = house[0])
-    }, 2500)
+    this.authService.afAuth.auth.onAuthStateChanged((user) => {
+      if (user != null) this.storage.getHouseOnline().subscribe((house) => this.online = house[0])
+    })
   }
 
   getAllHouses() : void {

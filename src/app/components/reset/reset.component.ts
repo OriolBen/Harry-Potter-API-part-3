@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, OnInit, NgZone } from '@angular/core'
 import { AuthenticationService } from '../../services/authentication.service'
 import { Router } from '@angular/router'
 
@@ -11,14 +11,11 @@ import { Router } from '@angular/router'
 export class ResetComponent {
   email : string = ""
 
-  constructor(private authService : AuthenticationService, private router : Router) {}
+  constructor(private ngZone: NgZone, private authService : AuthenticationService, private router : Router) {}
 
   ngOnInit() {
-    setTimeout(() => {
-      if (this.authService.isLoggedIn()) {
-        alert("You are already logged in!")
-        this.router.navigate([""])
-      }
-    }, 2500)
+    this.authService.afAuth.auth.onAuthStateChanged((user) => {
+      if (user != null) this.ngZone.run(() => this.router.navigate([""]))
+    })
   }
 }

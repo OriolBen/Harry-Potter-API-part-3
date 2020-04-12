@@ -12,28 +12,23 @@ export class AuthenticationService {
   displayName : string = ""
   logged : boolean = false
 
-  constructor(private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
-    this.checkLogIn()
-  }
-
-  checkLogIn() {
-    this.user = this.afAuth.authState
-    this.user.subscribe((user) => { 
-      if (user) {
+  constructor(public afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
+    this.afAuth.auth.onAuthStateChanged((user) => {
+      if (user == null) {
+        this.userDetails = null
+        this.logged = false
+      }
+      else {
         this.userDetails = user
         this.displayName = (this.userDetails.displayName) ? this.userDetails.displayName : this.userDetails.email
         this.logged = true
-      } 
-      else {
-        this.userDetails = null
-        this.logged = false
       }
     })
   }
 
   signInGoogle() {
     return this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider()).then((result) => {
-      this.checkLogIn()
+      this.logged = true
       this.db.database.ref(result.user.uid).once("value").then((snapshot) => {
         if (snapshot.val() === null) {
           this.db.database.ref(result.user.uid).set({
@@ -50,7 +45,7 @@ export class AuthenticationService {
 
   signInRegular(email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password).then((result) => {
-      this.checkLogIn()
+      this.logged = true
       this.db.database.ref(result.user.uid).once("value").then((snapshot) => {
         if (snapshot.val() === null) {
           this.db.database.ref(result.user.uid).set({
@@ -68,7 +63,7 @@ export class AuthenticationService {
 
   loginRegular(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password).then((result) => {
-      this.checkLogIn()
+      this.logged = true
       if (result.user.emailVerified !== true) {
         this.afAuth.auth.currentUser.sendEmailVerification()
         alert("Successful login.\nPlease verify your email address.")
