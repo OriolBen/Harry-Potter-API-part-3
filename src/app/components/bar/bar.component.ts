@@ -9,7 +9,6 @@ import { AuthenticationService } from '../../services/authentication.service'
 
 export class BarComponent {
   message : string = ""
-  logged : boolean = false
 
   constructor(private authService : AuthenticationService) {}
 }
