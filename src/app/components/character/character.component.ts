@@ -12,8 +12,6 @@ import { AuthenticationService } from '../../services/authentication.service'
 
 export class CharacterComponent implements OnInit {
   character : object = {}
-  local : Array<string> = []
-  online : Array<string> = []
   id : string = ""
   exists : boolean = false
   link : string = ""
@@ -22,15 +20,7 @@ export class CharacterComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(res => this.id = res.id)
-    this.local = this.storage.getCharactersLocal()
     this.getCharacter()
-    this.authService.afAuth.auth.onAuthStateChanged((user) => {
-      if (user != null) {
-        this.storage.getCharactersOnline().subscribe((characters) => {
-          this.online = Object.values(characters[0])
-        })
-      }
-    })
   }
 
   getCharacter() : void {
@@ -49,7 +39,7 @@ export class CharacterComponent implements OnInit {
   }
 
   addCharacterLocal() : void {
-    this.local = this.storage.addFavouriteLocal("characters", this.id).characters
+    this.storage.addFavouriteLocal("characters", this.id)
   }
 
   addCharacterOnline() : void {
@@ -57,7 +47,7 @@ export class CharacterComponent implements OnInit {
   }
 
   removeCharacterLocal() : void {
-    this.local = this.storage.removeFavouriteLocal("characters", this.id).characters
+    this.storage.removeFavouriteLocal("characters", this.id)
   }
 
   removeCharacterOnline() : void {
@@ -65,15 +55,15 @@ export class CharacterComponent implements OnInit {
   }
 
   checkCharacterLocal() : boolean {
-    for (var i = 0; i < this.local.length; i++) {
-      if (this.local[i] == this.id) return true
+    for (var i = 0; i < this.storage.local.characters.length; i++) {
+      if (this.storage.local.characters[i] == this.id) return true
     }
     return false
   }
 
   checkCharacterOnline() : boolean {
-    for (var i = 0; i < this.online.length; i++) {
-      if (this.online[i] == this.id) return true
+    for (var i = 0; i < this.storage.online.characters.length; i++) {
+      if (this.storage.online.characters[i] == this.id) return true
     }
     return false
   }

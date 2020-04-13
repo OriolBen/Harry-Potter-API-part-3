@@ -78,7 +78,7 @@ export class DataService {
     return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("characters")).valueChanges()
   }
 
-  addFavouriteLocal(category : string, id : string) : Favourite {
+  addFavouriteLocal(category : string, id : string) : void {
     switch (category) {
       case "house":
         this.local.house = id
@@ -88,10 +88,9 @@ export class DataService {
         break
     }
     this.data.setItem('Harry Potter API', JSON.stringify(this.local))
-    return this.local
   }
 
-  addFavouriteOnline(category : string, id : string) : Favourite {
+  addFavouriteOnline(category : string, id : string) : void {
     switch (category) {
       case "house":
         this.db.database.ref(this.authentication.userDetails.uid).update({
@@ -104,10 +103,9 @@ export class DataService {
         }).then(() => this.online[category].push(id))
         break
     }
-    return this.online
   }
 
-  removeFavouriteLocal(category : string, id : string) : Favourite {
+  removeFavouriteLocal(category : string, id : string) : void {
     switch (category) {
       case "house": 
         this.local.house = ""
@@ -119,10 +117,9 @@ export class DataService {
         break
     }
     this.data.setItem('Harry Potter API', JSON.stringify(this.local))
-    return this.local
   }
 
-  removeFavouriteOnline(category : string, id : string) : Favourite {
+  removeFavouriteOnline(category : string, id : string) : void {
     switch (category) {
       case "house": 
         this.db.database.ref(this.authentication.userDetails.uid).update({
@@ -139,7 +136,6 @@ export class DataService {
         })
         break
     }
-    return this.online
   }
 
   upload() : void {
