@@ -20,10 +20,6 @@ export interface Favourite {
 })
 
 export class DataService {
-  localEmpty : boolean = true
-  localEmptyHouse : boolean = true
-  localEmptyCharacters : boolean = true
-  localEmptySpells : boolean = true
   local : Favourite = {
     "house": "",
     "characters": [],
@@ -39,19 +35,12 @@ export class DataService {
   constructor(@Inject(LOCAL_DATA) public data : Storage, private db : AngularFireDatabase, public authentication : AuthenticationService) {
     let exists = this.data.getItem('Harry Potter API')
     if (exists) this.local = JSON.parse(exists)
-    this.localEmptyHouse = this.local.house == "" ? true : false
-    this.localEmptyCharacters = this.local.characters.length == 0 ? true : false
-    this.localEmptySpells = this.local.spells.length == 0 ? true : false
-    this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
-
     this.authentication.afAuth.auth.onAuthStateChanged((user) => {
       if (user != null) {
         this.getFavouriteOnline().subscribe((data) => {
           this.online.characters = Object.values(data[0])
           this.online.house = data[1]
           this.online.spells = Object.values(data[2])
-          console.log(this.online)
-          console.log(this.local)
         })
       }
     })
