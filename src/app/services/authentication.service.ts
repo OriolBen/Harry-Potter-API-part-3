@@ -12,7 +12,7 @@ export class AuthenticationService {
   displayName : string = ""
   logged : boolean = false
 
-  constructor(private ngZone: NgZone, private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
+  constructor(private ngZone: NgZone, public afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
     this.afAuth.auth.onAuthStateChanged((user) => {
       if (user == null) {
         this.userDetails = null
