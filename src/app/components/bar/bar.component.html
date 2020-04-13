@@ -3,11 +3,11 @@
     <img src="https://cdn.jsdelivr.net/gh/OriolBen/Harry-Potter-API-part-3@master/src/app/assets/hogwarts.png">
     <h1>Harry Potter API</h1>
   </a>
-  <div *ngIf="!authService.isLoggedIn()">
+  <div *ngIf="!logged">
     <button routerLink="/login">Login</button>
     <button routerLink="/register">Register</button>
   </div>
-  <div *ngIf="authService.isLoggedIn()">
+  <div *ngIf="logged">
     <p>Welcome back, {{authService.userDetails.email}}</p>
     <button (click)="authService.logout()">Logout</button>
   </div>
