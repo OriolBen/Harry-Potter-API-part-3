@@ -1,4 +1,4 @@
-<div *ngIf="hide">
+<div>
   <div *ngIf="mode == 'resetPassword'">
     <h2>Reset password</h2>
     <form (ngSubmit)="authService.resetPassword(oobCode, password)">
