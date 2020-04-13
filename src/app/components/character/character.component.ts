@@ -55,7 +55,7 @@ export class CharacterComponent implements OnInit {
   }
 
   checkCharacterLocal() : boolean {
-    for (SVGAnimatedLength i = 0; i < this.storage.local.characters.length; i++) {
+    for (let i = 0; i < this.storage.local.characters.length; i++) {
       if (this.storage.local.characters[i] == this.id) return true
     }
     return false

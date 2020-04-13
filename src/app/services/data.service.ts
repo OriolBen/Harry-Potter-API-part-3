@@ -29,10 +29,6 @@ export class DataService {
     "characters": [],
     "spells": []
   }
-  onlineEmpty : boolean = true
-  onlineEmptyHouse : boolean = true
-  onlineEmptyCharacters : boolean = true
-  onlineEmptySpells : boolean = true
   online : Favourite = {
     "house": "",
     "characters": [],
