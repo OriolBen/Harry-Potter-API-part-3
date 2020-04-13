@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
 import { auth } from 'firebase/app'
@@ -12,7 +12,7 @@ export class AuthenticationService {
   displayName : string = ""
   logged : boolean = false
 
-  constructor(public afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
+  constructor(private ngZone: NgZone, private afAuth : AngularFireAuth, private router : Router, private db : AngularFireDatabase) {
     this.afAuth.auth.onAuthStateChanged((user) => {
       if (user == null) {
         this.userDetails = null
@@ -39,7 +39,7 @@ export class AuthenticationService {
         }
       })
       alert("Successful login.")
-      this.router.navigate([""])
+      this.ngZone.run(() => this.router.navigate([""]))
     }).catch((e) => alert(e.message))
   }
 
@@ -57,7 +57,7 @@ export class AuthenticationService {
       })
       this.afAuth.auth.currentUser.sendEmailVerification()
       alert("Successful registration.\nPlease verify your email address.")
-      this.router.navigate([""])
+      this.ngZone.run(() => this.router.navigate([""]))
     }).catch((e) => alert(e.message))
   }
 
@@ -69,7 +69,7 @@ export class AuthenticationService {
         alert("Successful login.\nPlease verify your email address.")
       }
       else alert("Successful login.")
-      this.router.navigate([""])
+      this.ngZone.run(() => this.router.navigate([""]))
     }).catch((e) => alert(e.message))
   }
 
@@ -79,29 +79,29 @@ export class AuthenticationService {
 
   logout() {
     this.logged = false
-    return this.afAuth.auth.signOut().then(() => this.router.navigate([""]))
+    return this.afAuth.auth.signOut().then(() => this.ngZone.run(() => this.router.navigate([""])))
   }
 
   resetPasswordEmail(email: string) { 
-    return this.afAuth.auth.sendPasswordResetEmail(email).then(() => alert('A password reset link has been sent to your email address'), (rejectionReason) => alert(rejectionReason)).catch(e => alert('An error occurred while attempting to reset your password')).then(() => this.router.navigate([""]))
+    return this.afAuth.auth.sendPasswordResetEmail(email).then(() => alert('A password reset link has been sent to your email address'), (rejectionReason) => alert(rejectionReason)).catch(e => alert('An error occurred while attempting to reset your password')).then(() => this.ngZone.run(() => this.router.navigate([""])))
   }
 
   checkOobCode(mode : string, oobCode : string) {
     if (mode == "resetPassword") {
       return this.afAuth.auth.verifyPasswordResetCode(oobCode).catch(e => {
         alert(e.message)
-        this.router.navigate([""])
+        this.ngZone.run(() => this.router.navigate([""]))
       })
     }
     else if (mode == "verifyEmail") {
-      return this.afAuth.auth.applyActionCode(oobCode).then(() => alert("Email has been verified")).catch(e => alert(e.message)).then(() => this.router.navigate([""]))
+      return this.afAuth.auth.applyActionCode(oobCode).then(() => alert("Email has been verified")).catch(e => alert(e.message)).then(() => this.ngZone.run(() => this.router.navigate([""])))
     }
   }
 
   resetPassword(oobCode : string, password : string) {
     return this.afAuth.auth.confirmPasswordReset(oobCode, password).then(() => {
       alert('New password has been saved')
-      this.router.navigate(["/login"])
+      this.ngZone.run(() => this.router.navigate(["/login"]))
     }).catch(e => alert(e.message))
   }
 }

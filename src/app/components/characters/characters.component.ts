@@ -12,8 +12,6 @@ import { AuthenticationService } from '../../services/authentication.service'
 export class CharactersComponent implements OnInit {
   characters : Array<any> = []
   houses : object = {}
-  local : Array<string> = []
-  online : Array<string> = []
   name : string = ""
   temporaryName : string = ""
   filtered : Array<any> = []
@@ -31,16 +29,8 @@ export class CharactersComponent implements OnInit {
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 
   ngOnInit() {
-    this.local = this.storage.getCharactersLocal()
     this.getHousesId()
     this.getAllCharacters()
-    setTimeout(() => {
-      if (this.authService.isLoggedIn()) {
-        this.storage.getCharactersOnline().subscribe((characters) => {
-          this.online = Object.values(characters[0])
-        })
-      }
-    }, 2500)
   }
 
   getHousesId() : void {
@@ -114,7 +104,7 @@ export class CharactersComponent implements OnInit {
   }
 
   addCharacterLocal(id : string) : void {
-    this.local = this.storage.addFavouriteLocal("characters", id).characters
+    this.storage.addFavouriteLocal("characters", id)
   }
 
   addCharacterOnline(id : string) : void {
@@ -122,7 +112,7 @@ export class CharactersComponent implements OnInit {
   }
 
   removeCharacterLocal(id : string) : void {
-    this.local = this.storage.removeFavouriteLocal("characters", id).characters
+    this.storage.removeFavouriteLocal("characters", id)
   }
 
   removeCharacterOnline(id : string) : void {
@@ -130,15 +120,15 @@ export class CharactersComponent implements OnInit {
   }
 
   checkCharacterLocal(id : string) : boolean {
-    for (var i = 0; i < this.local.length; i++) {
-      if (this.local[i] == id) return true
+    for (let i = 0; i < this.storage.local.characters.length; i++) {
+      if (this.storage.local.characters[i] == id) return true
     }
     return false
   }
 
   checkCharacterOnline(id : string) : boolean {
-    for (var i = 0; i < this.online.length; i++) {
-      if (this.online[i] == id) return true
+    for (let i = 0; i < this.storage.online.characters.length; i++) {
+      if (this.storage.online.characters[i] == id) return true
     }
     return false
   }

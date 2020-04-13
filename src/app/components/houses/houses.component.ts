@@ -11,19 +11,13 @@ import { AuthenticationService } from '../../services/authentication.service'
 
 export class HousesComponent implements OnInit {
   houses : Array<any> = []
-  local : string = ""
-  online : string = ""
   characters : object = {}
 
   constructor(private api : ApiService, private storage : DataService, private authService : AuthenticationService) {}
 
   ngOnInit() {
-    this.local = this.storage.getHouseLocal()
     this.getCharactersNames()
     this.getAllHouses()
-    this.authService.afAuth.auth.onAuthStateChanged((user) => {
-      if (user != null) this.storage.getHouseOnline().subscribe((house) => this.online = house[0])
-    })
   }
 
   getAllHouses() : void {
@@ -41,7 +35,7 @@ export class HousesComponent implements OnInit {
   }
 
   addHouseLocal(id : string) : void {
-    this.local = this.storage.addFavouriteLocal("house", id).house
+    this.storage.addFavouriteLocal("house", id)
   }
 
   addHouseOnline(id : string) : void {
@@ -49,7 +43,7 @@ export class HousesComponent implements OnInit {
   }
 
   removeHouseLocal(id : string) : void {
-    this.local = this.storage.removeFavouriteLocal("house", id).house
+    this.storage.removeFavouriteLocal("house", id)
   }
 
   removeHouseOnline(id : string) : void {
@@ -57,11 +51,11 @@ export class HousesComponent implements OnInit {
   }
 
   checkHouseLocal(id : string) : boolean {
-    return this.local == id
+    return this.storage.local.house == id
   }
 
   checkHouseOnline(id : string) : boolean {
-    return this.online == id
+    return this.storage.online.house == id
   }
 
   check(id : string) : boolean {

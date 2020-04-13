@@ -20,11 +20,19 @@ export interface Favourite {
 })
 
 export class DataService {
+  localEmpty : boolean = true
+  localEmptyHouse : boolean = true
+  localEmptyCharacters : boolean = true
+  localEmptySpells : boolean = true
   local : Favourite = {
     "house": "",
     "characters": [],
     "spells": []
   }
+  onlineEmpty : boolean = true
+  onlineEmptyHouse : boolean = true
+  onlineEmptyCharacters : boolean = true
+  onlineEmptySpells : boolean = true
   online : Favourite = {
     "house": "",
     "characters": [],
@@ -35,12 +43,19 @@ export class DataService {
   constructor(@Inject(LOCAL_DATA) public data : Storage, private db : AngularFireDatabase, public authentication : AuthenticationService) {
     let exists = this.data.getItem('Harry Potter API')
     if (exists) this.local = JSON.parse(exists)
+    this.localEmptyHouse = this.local.house == "" ? true : false
+    this.localEmptyCharacters = this.local.characters.length == 0 ? true : false
+    this.localEmptySpells = this.local.spells.length == 0 ? true : false
+    this.localEmpty = this.localEmptyHouse && this.localEmptyCharacters && this.localEmptySpells ? true : false
+
     this.authentication.afAuth.auth.onAuthStateChanged((user) => {
       if (user != null) {
         this.getFavouriteOnline().subscribe((data) => {
           this.online.characters = Object.values(data[0])
           this.online.house = data[1]
           this.online.spells = Object.values(data[2])
+          console.log(this.online)
+          console.log(this.local)
         })
       }
     })
@@ -52,30 +67,6 @@ export class DataService {
 
   getFavouriteOnline() : Observable<any> {
     return this.db.list(this.authentication.userDetails.uid).valueChanges()
-  }
-
-  getHouseLocal() : string {
-    return this.local.house
-  }
-
-  getHouseOnline() : Observable<any> {
-    return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("house")).valueChanges()
-  }
-  
-  getSpellsLocal() : Array<string> {
-    return this.local.spells
-  }
-
-  getSpellsOnline() : Observable<any> {
-    return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("spells")).valueChanges()
-  }
-
-  getCharactersLocal() : Array<string> {
-    return this.local.characters
-  }
-
-  getCharactersOnline() : Observable<any> {
-    return this.db.list(this.authentication.userDetails.uid, ref => ref.orderByKey().equalTo("characters")).valueChanges()
   }
 
   addFavouriteLocal(category : string, id : string) : void {
@@ -100,7 +91,7 @@ export class DataService {
       default:
         this.db.database.ref(this.authentication.userDetails.uid + "/" + category).update({
           [id]: id
-        }).then(() => this.online[category].push(id))
+        })
         break
     }
   }
@@ -111,7 +102,7 @@ export class DataService {
         this.local.house = ""
         break
       default:
-        for (var i = 0; i < this.local[category].length; i++) {
+        for (let i = 0; i < this.local[category].length; i++) {
           if (this.local[category][i] == id) this.local[category].splice(i, 1)
         }
         break
@@ -124,13 +115,10 @@ export class DataService {
       case "house": 
         this.db.database.ref(this.authentication.userDetails.uid).update({
           house: ""
-        }).then(() => this.online.house = "") 
+        })
         break
       default:
-        for (var i = 0; i < this.online[category].length; i++) {
-          if (this.online[category][i] == id) this.online[category].splice(i, 1)
-        }
-        if (this.online[category].length != 0) this.db.database.ref(this.authentication.userDetails.uid + "/" + category + "/" + id).remove()
+        if (this.online[category].length != 1) this.db.database.ref(this.authentication.userDetails.uid + "/" + category + "/" + id).remove()
         else this.db.database.ref(this.authentication.userDetails.uid).update({
           [category]: ""
         })

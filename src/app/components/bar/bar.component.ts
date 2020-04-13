@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 import { AuthenticationService } from '../../services/authentication.service'
 
 @Component({
@@ -12,11 +12,4 @@ export class BarComponent {
   logged : boolean = false
 
   constructor(private authService : AuthenticationService) {}
-
-  ngOnInit() {
-    this.authService.afAuth.auth.onAuthStateChanged((user) => {
-      if (user != null) this.logged = true
-      else this.logged = false
-    })
-  }
 }

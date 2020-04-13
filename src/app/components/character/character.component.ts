@@ -55,14 +55,14 @@ export class CharacterComponent implements OnInit {
   }
 
   checkCharacterLocal() : boolean {
-    for (var i = 0; i < this.storage.local.characters.length; i++) {
+    for (SVGAnimatedLength i = 0; i < this.storage.local.characters.length; i++) {
       if (this.storage.local.characters[i] == this.id) return true
     }
     return false
   }
 
   checkCharacterOnline() : boolean {
-    for (var i = 0; i < this.storage.online.characters.length; i++) {
+    for (let i = 0; i < this.storage.online.characters.length; i++) {
       if (this.storage.online.characters[i] == this.id) return true
     }
     return false

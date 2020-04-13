@@ -12,8 +12,6 @@ import { AuthenticationService } from '../../services/authentication.service'
 
 export class HouseComponent implements OnInit {
   house : object = {}
-  local : string = ""
-  online : string = ""
   id : string = ""
   exists : boolean = false
   characters : object = {}
@@ -22,11 +20,7 @@ export class HouseComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(res => this.id = res.id)
-    this.local = this.storage.getHouseLocal()
     this.getHouse()
-    setTimeout(() => {
-      if (this.authService.isLoggedIn()) this.storage.getHouseOnline().subscribe((house) => this.online = house[0])
-    }, 2500)
   }
 
   getHouse() : void {
@@ -49,7 +43,7 @@ export class HouseComponent implements OnInit {
   }
 
   addHouseLocal(id : string) : void {
-    this.local = this.storage.addFavouriteLocal("house", id).house
+    this.storage.addFavouriteLocal("house", id)
   }
 
   addHouseOnline(id : string) : void {
@@ -57,7 +51,7 @@ export class HouseComponent implements OnInit {
   }
 
   removeHouseLocal(id : string) : void {
-    this.local = this.storage.removeFavouriteLocal("house", id).house
+    this.storage.removeFavouriteLocal("house", id)
   }
 
   removeHouseOnline(id : string) : void {
@@ -65,11 +59,11 @@ export class HouseComponent implements OnInit {
   }
 
   checkHouseLocal(id : string) : boolean {
-    return this.local == id
+    return this.storage.local.house == id
   }
 
   checkHouseOnline(id : string) : boolean {
-    return this.online == id
+    return this.storage.online.house == id
   }
 
   check(id : string) : boolean {
