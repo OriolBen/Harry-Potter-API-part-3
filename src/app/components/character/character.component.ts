@@ -24,13 +24,13 @@ export class CharacterComponent implements OnInit {
     this.route.params.subscribe(res => this.id = res.id)
     this.local = this.storage.getCharactersLocal()
     this.getCharacter()
-    setTimeout(() => {
-      if (this.authService.isLoggedIn()) {
+    this.authService.afAuth.auth.onAuthStateChanged((user) => {
+      if (user != null) {
         this.storage.getCharactersOnline().subscribe((characters) => {
           this.online = Object.values(characters[0])
         })
       }
-    }, 2500)
+    })
   }
 
   getCharacter() : void {

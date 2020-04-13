@@ -35,15 +35,15 @@ export class DataService {
   constructor(@Inject(LOCAL_DATA) public data : Storage, private db : AngularFireDatabase, public authentication : AuthenticationService) {
     let exists = this.data.getItem('Harry Potter API')
     if (exists) this.local = JSON.parse(exists)
-    setTimeout(() => {
-      if (this.authentication.isLoggedIn()) {
+    this.authentication.afAuth.auth.onAuthStateChanged((user) => {
+      if (user != null) {
         this.getFavouriteOnline().subscribe((data) => {
           this.online.characters = Object.values(data[0])
           this.online.house = data[1]
           this.online.spells = Object.values(data[2])
         })
       }
-    }, 2500)
+    })
   }
 
   getFavouriteLocal() : Favourite {
